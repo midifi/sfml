@@ -1,0 +1,10 @@
+#!/bin/sh
+for p in system window graphics; do
+    echo Generating sfml-$p.fpc...
+    cat > sfml-fpc/sfml-$p.fpc <<EOF
+Name: sfml-$p
+Description: Felix bindings for SFML (Simple Fast Multimedia Library) $p.
+provides_dlib: `pkg-config --libs sfml-$p`
+provides_slib: `pkg-config --libs sfml-$p`
+EOF
+done

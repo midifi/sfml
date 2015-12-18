@@ -1,0 +1,108 @@
+class SFML_Window {
+    private header window_hpp = '#include <SFML/Window.hpp>' requires
+        package 'sfml-window', body '''
+        typedef sf::Window flx_sfml_window;
+        FLX_FINALISER(flx_sfml_window)
+        ''';
+
+
+    type VideoMode = 'sf::VideoMode' requires window_hpp;
+    ctor VideoMode: uint * uint * uint = 'VideoMode($1, $2, $3)';
+    ctor VideoMode: uint * uint = 'sf::VideoMode($1, $2)';
+    fun is_valid: VideoMode -> bool = '$1.isvalid()';
+    lvalue fun width: VideoMode -> uint = '$1.width';
+    lvalue fun height: VideoMode -> uint = '$1.height';
+    lvalue fun bits_per_pixel: VideoMode -> uint = '$1.bitsPerPixel';
+
+    instance Str[VideoMode] {
+        fun str(v: VideoMode) =>
+            f"VideoMode (width=%u, height=%u)" (v.width, v.height);
+    }
+
+    gen desktop_mode: 1 -> VideoMode = 'sf::VideoMode::getDesktopMode()';
+
+
+    type Event = 'sf::Event';
+    class EventType {
+        const Closed: uint = 'sf::Event::Closed';
+        const Resized: uint = 'sf::Event::Resized';
+        const LostFocus: uint = 'sf::Event::LostFocus';
+        const GainedFocus: uint = 'sf::Event::GainedFocus';
+        const TextEntered: uint = 'sf::Event::TextEntered';
+        const KeyPressed: uint = 'sf::Event::KeyPressed';
+        const KeyReleased: uint = 'sf::Event::KeyReleased';
+        const MouseWheelMoved: uint = 'sf::Event::MouseWheelMoved';
+        const MouseWheelScrolled: uint = 'sf::Event::MouseWheelScrolled';
+        const MouseButtonPressed: uint = 'sf::Event::MouseButtonPressed';
+        const MouseButtonReleased: uint = 'sf::Event::MouseButtonReleased';
+        const MouseMoved: uint = 'sf::Event::MouseMoved';
+        const MouseEntered: uint = 'sf::Event::MouseEntered';
+        const MouseLeft: uint = 'sf::Event::MouseLeft';
+        const JoystickButtonPressed: uint = 'sf::Event::JoystickButtonPressed';
+        const JoystickButtonReleased: uint = 'sf::Event::JoystickButtonReleased';
+        const JoystickMoved: uint = 'sf::Event::JoystickMoved';
+        const JoystickConnected: uint = 'sf::Event::JoystickConnected';
+        const JoystickDisconnected: uint = 'sf::Event::JoystickDisconnected';
+        const TouchBegan: uint = 'sf::Event::TouchBegan';
+        const TouchMoved: uint = 'sf::Event::TouchMoved';
+        const TouchEnded: uint = 'sf::Event::TouchEnded';
+        const SensorChanged: uint = 'sf::Event::SensorChanged';
+        const Count: uint = 'sf::Event::Count';
+    }
+    fun type: Event -> uint = '$1.type';
+
+
+    class Style {
+        const None: uint = 'sf::Style::None';
+        const Titlebar: uint = 'sf::Style::Titlebar';
+        const Resize: uint = 'sf::Style::Resize';
+        const Close: uint = 'sf::Style::Close';
+        const Fullscreen: uint = 'sf::Style::Fullscreen';
+        const Default: uint = 'sf::Style::Default';
+    }
+
+
+    class WindowType[T] {
+        proc create: T * VideoMode * string * uint =
+        '$1->create($2, static_cast<sf::String>($3), $4);';
+        proc create: T * VideoMode * string =
+        '$1->create($2, static_cast<sf::String>($3));';
+        proc close: T = '$1->close();';
+        fun isopen: T -> bool = '$1->isOpen()';
+
+        gen poll_event: T * &Event -> bool = '$1->pollEvent(*$2)';
+        gen poll_event(w: T)(e: &Event) => poll_event (w, e);
+
+        fun position: T -> SFML_System::Vector2i = '$1->getPosition()';
+        proc set_position: T * SFML_System::Vector2i =
+            '$1->setPosition($2);';
+        proc set_position(w: T)(v: SFML_System::Vector2i) =>
+            set_position (w, v);
+
+        fun wsize: T -> SFML_System::Vector2u = '$1->getSize()';
+        proc set_size: T * SFML_System::Vector2u = '$1->setSize($2);';
+        proc set_size(w: T)(v: SFML_System::Vector2u) => set_size (w, v);
+
+        fun title: T -> string = '$1->getTitle()->toUtf8()';
+        proc set_title: T * string =
+            '$1->setTitle(static_cast<sf::String>($2));';
+        proc set_title(w: T)(s: string) => set_title (w, s);
+
+        proc set_vertical_sync: T * bool = '$1->setVerticalSyncEnabled($2);';
+        proc set_vertical_sync(w: T)(b: bool) => set_vertical_sync (w, b);
+        proc set_framerate_limit: T * uint = '$1->setFramerateLimit($2);';
+        proc set_framerate_limit(w: T)(l: uint) =>
+            set_framerate_limit (w, l);
+    }
+
+
+    type Window = 'sf::Window*' requires window_hpp;
+    ctor Window: VideoMode * string * uint =
+        'new sf::Window($1, static_cast<sf::String>($2), $3)'
+        requires finaliser 'flx_sfml_window_finaliser';
+    ctor Window: VideoMode * string =
+        'new sf::Window($1, static_cast<sf::String>($2))'
+        requires finaliser 'flx_sfml_window_finaliser';
+    instance WindowType[Window] {}
+    inherit WindowType[Window];
+}

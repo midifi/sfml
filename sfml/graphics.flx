@@ -1,0 +1,293 @@
+class SFML_Graphics {
+    private header graphics_hpp = '#include <SFML/Graphics.hpp>' requires
+        package 'sfml-graphics', body '''
+        typedef sf::RenderWindow flx_sfml_renderwindow;
+        FLX_FINALISER(flx_sfml_renderwindow)
+        ''';
+
+
+    type Color = 'sf::Color' requires graphics_hpp;
+    ctor Color: utiny * utiny * utiny = 'sf::Color($1, $2, $3)';
+    ctor Color: utiny * utiny * utiny * utiny = 'sf::Color($1, $2, $3, $4)';
+    class Colors {
+        const Black: Color = 'sf::Color::Black';
+        const White: Color = 'sf::Color::White';
+        const Red: Color = 'sf::Color::Red';
+        const Green: Color = 'sf::Color::Green';
+        const Blue: Color = 'sf::Color::Blue';
+        const Yellow: Color = 'sf::Color::Yellow';
+        const Magenta: Color = 'sf::Color::Magenta';
+        const Cyan: Color = 'sf::Color::Cyan';
+        const Transparent: Color = 'sf::Color::Transparent';
+    }
+    fun r: Color -> utiny = '$1.r';
+    fun g: Color -> utiny = '$1.g';
+    fun b: Color -> utiny = '$1.b';
+    fun a: Color -> utiny = '$1.a';
+
+    // XXX: This should probably derive from FloatAddgrp and FloatMultiSemi1.
+    fun +: Color * Color -> Color = '$1 + $2';
+    fun -: Color * Color -> Color = '$1 - $2';
+    fun *: Color * Color -> Color = '$1 * $2';
+
+    proc +=: Color * Color -> Color = '$1 += $2;';
+    proc -=: Color * Color -> Color = '$1 -= $2;';
+    proc *=: Color * Color -> Color = '$1 *= $2;';
+
+    instance Str[Color] {
+        fun str(c: Color) =>
+            f"Color (%hhx, %hhx, %hhx, %hhx)" (c.r, c.g, c.b, c.a);
+    }
+
+
+    type Rect[T] = 'sf::Rect<?1>' requires graphics_hpp;
+    ctor[T] Rect[T]: T * T * T * T = 'sf::Rect<?1>($1, $2, $3, $4)';
+    ctor[T] Rect[T]: SFML_System::Vector2[T] * SFML_System::Vector2[T] =
+        'sf::Rect<?1>($1, $2)';
+
+    fun contains[T]: Rect[T] * T * T -> bool = '$1.contains($2, $3)';
+    fun contains[T](r: Rect[T])(x: T, y: T) => contains (r, x, y);
+    fun contains[T]: Rect[T] * SFML_System::Vector2[T] -> bool =
+        '$1.contains($2)';
+    fun contains[T](r: Rect[T])(v: SFML_System::Vector2[T]) => contains (r, v);
+
+    fun intersects[T]: Rect[T] * Rect[T] -> bool = '$1.intersects($2)';
+    fun intersects[T](r: Rect[T])(s: Rect[T]) => intersects (r, s);
+    fun intersects[T]: Rect[T] * Rect[T] * Rect[T] -> bool =
+        '$1.intersects($2, $3)';
+    fun intersects[T](r: Rect[T])(s: Rect[T], i: Rect[T]) -> bool =>
+        intersects (r, s, i);
+
+    fun left[T]: Rect[T] -> T = '$1.left';
+    fun top[T]: Rect[T] -> T = '$1.top';
+    fun width[T]: Rect[T] -> T = '$1.width';
+    fun height[T]: Rect[T] -> T = '$1.height';
+
+    typedef IntRect = Rect[int];
+    fun _ctor_IntRect(l: int, t: int, w: int, h: int) => Rect[int] (l, t, w, h);
+    fun _ctor_IntRect(p: SFML_System::Vector2[int],
+                      s: SFML_System::Vector2[int]) => Rect (p, s);
+    typedef FloatRect = Rect[float];
+    fun _ctor_FloatRect(l: float, t: float, w: float, h: float) =>
+        Rect[float] (l, t, w, h);
+    fun _ctor_FloatRect(p: SFML_System::Vector2[float],
+                        s: SFML_System::Vector2[float]) => Rect (p, s);
+
+
+    class Movable[T] {
+        proc move: T * float * float = '$1.move($2, $3);';
+        proc move: T * SFML_System::Vector2f = '$1.move($2);';
+        proc move(t: T)(x: float, y: float) => move (t, x, y);
+        proc move(t: T)(v: SFML_System::Vector2f) => move (t, v);
+
+        proc rotate: T * float = '$1.rotate($2)';
+        proc rotate(t: T)(a: float) => rotate (t, a);
+    }
+
+
+    type View = 'sf::View' requires graphics_hpp;
+    ctor View: FloatRect = 'sf::View($1)';
+    ctor View: SFML_System::Vector2f * SFML_System::Vector2f = 'sf::View($1, $2)';
+
+    proc set_viewport: View * FloatRect = '$1.setViewport($2);';
+    proc set_viewport(v: View)(r: FloatRect) => set_viewport (v, r);
+    fun viewport: View -> FloatRect = '$1.getViewport()';
+
+    proc set_center: View * float * float = '$1.setCenter($2, $3);';
+    proc set_center(v: View)(x: float, y: float) => set_center (v, x, y);
+    proc set_center: View * SFML_System::Vector2f = '$1.setCenter($2);';
+    proc set_center(v: View)(c: SFML_System::Vector2f) => set_center (v, c);
+    fun center: View -> SFML_System::Vector2f = '$1.getCenter()';
+
+    proc set_size: View * float * float = '$1.setSize($2, $3);';
+    proc set_size(v: View)(w: float, h: float) => set_size (v, w, h);
+    proc set_size: View * SFML_System::Vector2f = '$1.setSize($2);';
+    proc set_size(v: View)(c: SFML_System::Vector2f) => set_size (v, c);
+    fun vsize: View -> SFML_System::Vector2f = '$1.getSize()';
+
+    proc set_rotation: View * float = '$1.setRotation($2);';
+    proc set_rotation(v: View)(r: float) => set_rotation (v, r);
+    fun rotation: View -> float = '$1.getRotation()';
+
+    proc zoom: View * float = '$1.zoom($2);';
+    proc zoom(v: View)(z: float) => zoom (v, z);
+
+    instance Movable[View] {}
+    inherit Movable[View];
+
+
+    class Drawable[T] {}
+
+    class Transformable[T] {
+        inherit Movable[T];
+
+        proc set_position: T * float * float = '$1.setPosition($2, $3);';
+        proc set_position: T * SFML_System::Vector2f = '$1.setPosition($2);';
+        proc set_position(t: T)(x: float, y: float) => set_position (t, x, y);
+        proc set_position(t: T)(v: SFML_System::Vector2f) => set_position (t, v);
+
+        proc set_rotation: T * float = '$1.setRotation($2)';
+        proc set_rotation(t: T)(a: float) => set_rotation (t, a);
+
+        proc set_scale: T * float * float = '$1.setScale($2, $3);';
+        proc set_scale: T * SFML_System::Vector2f = '$1.setScale($2);';
+        proc set_scale(t: T)(x: float, y: float) => set_scale (t, x, y);
+        proc set_scale(t: T)(v: SFML_System::Vector2f) => set_scale (t, v);
+
+        proc set_origin: T * float * float = '$1.setOrigin($2, $3);';
+        proc set_origin: T * SFML_System::Vector2f = '$1.setOrigin($2);';
+        proc set_origin(t: T)(x: float, y: float) => set_origin (t, x, y);
+        proc set_origin(t: T)(v: SFML_System::Vector2f) => set_origin (t, v);
+
+        fun position: T -> SFML_System::Vector2f = '$1.getPosition()';
+        fun rotation: T -> float = '$1.getRotation()';
+        fun scale: T -> SFML_System::Vector2f = '$1.getScale()';
+        fun origin: T -> SFML_System::Vector2f = '$1.getOrigin()';
+
+        proc scale: T * float * float = '$1.scale($2)';
+        proc scale(t: T)(x: float, y: float) => scale (t, x, y);
+    }
+
+    class Bounded[T] {
+        fun get_global_bounds: T -> FloatRect = '$1.getGlobalBounds()';
+        fun get_local_bounds: T -> FloatRect = '$1.getLocalBounds()';
+    }
+
+    class RenderTarget[T] {
+        proc clear: T * Color = '$1->clear($2);';
+        proc clear(w: T)(c: Color) => clear (w, c);
+
+        proc display: T = '$1->display();';
+        proc draw[D with Drawable[D]]: T * D = '$1->draw($2);';
+        proc draw[D with Drawable[D]](t: T)(d: D) => draw (t, d);
+
+        proc set_view: T * View = '$1->setView($2);';
+        proc set_view(t: T)(v: View) => set_view (t, v);
+        fun view: T -> &View = '&$1->getView()';
+        fun default_view: T -> View = '$1->getDefaultView()';
+    }
+
+
+    type RenderWindow = 'sf::RenderWindow*' requires graphics_hpp;
+    ctor RenderWindow: VideoMode * string * uint =
+        'new sf::RenderWindow($1, static_cast<sf::String>($2), $3)'
+        requires finaliser 'flx_sfml_renderwindow_finaliser';
+    ctor RenderWindow: VideoMode * string =
+        'new sf::RenderWindow($1, static_cast<sf::String>($2))'
+        requires finaliser 'flx_sfml_renderwindow_finaliser';
+    instance SFML_Window::WindowType[RenderWindow] {}
+    inherit SFML_Window::WindowType[RenderWindow];
+
+    instance RenderTarget[RenderWindow] {}
+    inherit RenderTarget[RenderWindow];
+
+
+    type Font = 'sf::Font' requires graphics_hpp;
+    ctor Font: 1 = 'sf::Font()';
+    gen load_from_file: Font * string -> bool = '$1.loadFromFile($2)';
+    gen load_from_file(f: Font)(p: string) => load_from_file (f, p);
+
+    type Text = 'sf::Text' requires graphics_hpp;
+    ctor Text: 1 = 'sf::Text()';
+    instance Drawable[Text] {}
+    inherit Drawable[Text];
+    instance Transformable[Text] {}
+    inherit Transformable[Text];
+    instance Bounded[Text] {}
+    inherit Bounded[Text];
+    proc set_font: Text * Font = '$1.setFont($2);';
+    proc set_font(t: Text)(f: Font) => set_font (t, f);
+
+    proc set_string: Text * string = '$1.setString(static_cast<sf::String>($2));';
+    proc set_string(t: Text)(s: string) => set_string (t, s);
+    fun tstring: Text -> string = '$1.getString().toUtf8()';
+
+    proc set_character_size: Text * uint = '$1.setCharacterSize($2);';
+    proc set_character_size(t: Text)(z: uint) => set_character_size (t, z);
+    fun character_size: Text -> uint = '$1.getCharacterSize()';
+
+    proc set_color: Text * Color = '$1.setColor($2);';
+    proc set_color(t: Text)(c: Color) => set_color (t, c);
+    fun color: Text -> Color = '$1.getColor()';
+
+    class TextStyle {
+        const Regular: uint = 'sf::Text::Regular';
+        const Bold: uint = 'sf::Text::Bold';
+        const Italic: uint = 'sf::Text::Italic';
+        const Underlined: uint = 'sf::Text::Underlined';
+        const StrikeThrough: uint = 'sf::Text::StrikeThrough';
+    }
+
+    proc set_style: Text * uint = '$1.setStyle($2);';
+    proc set_style(t: Text)(s: uint) => set_style (t, s);
+
+
+    class Shape[T] {
+        instance Drawable[T] {}
+        inherit Drawable[T];
+        instance Transformable[T] {}
+        inherit Transformable[T];
+        instance Bounded[T] {}
+        inherit Bounded[T];
+
+        proc set_fill_color: T * Color = '$1.setFillColor($2);';
+        proc set_fill_color(s: T)(c: Color) => set_fill_color (s, c);
+        fun fill_color: T -> Color = '$1.getFillColor()';
+
+        proc set_outline_color: T * Color = '$1.setOutlineColor($2);';
+        proc set_outline_color(s: T)(c: Color) => set_outline_color (s, c);
+        fun outline_color: T -> Color = '$1.getOutlineColor()';
+
+        proc set_outline_thickness: T * float = '$1.setOutlineThickness($2);';
+        proc set_outline_thickness(s: T)(t: float) =>
+            set_outline_thickness (s, t);
+        fun outline_thickness: T -> float = '$1.getOutlineThickness()';
+    }
+
+    type CircleShape = 'sf::CircleShape' requires graphics_hpp;
+    ctor CircleShape: float * size = 'sf::CircleShape($1, $2)';
+    instance Shape[CircleShape] {}
+    inherit Shape[CircleShape];
+
+    proc set_radius: CircleShape * float = '$1.setRadius($2);';
+    proc set_radius(c: CircleShape)(r: float) => set_radius (c, r);
+    fun radius: CircleShape -> float = '$1.getRadius()';
+
+    proc set_point_count: CircleShape * size = '$1.setPointCount($2);';
+    proc set_point_count(c: CircleShape)(r: size) => set_point_count (c, r);
+    fun point_count: CircleShape -> size = '$1.getPointCount()';
+
+    fun point: CircleShape * size -> SFML_System::Vector2f = '$1.getPoint($2)';
+    fun point(c: CircleShape)(z: size) => point (c, z);
+
+    type RectangleShape = 'sf::RectangleShape' requires graphics_hpp;
+    ctor RectangleShape: SFML_System::Vector2f = 'sf::RectangleShape($1)';
+    ctor RectangleShape: 1 = 'sf::RectangleShape()';
+    instance Shape[RectangleShape] {}
+    inherit Shape[RectangleShape];
+
+    proc set_size: RectangleShape * SFML_System::Vector2f = '$1.setSize($2);';
+    proc set_size(r: RectangleShape)(z: SFML_System::Vector2f) => set_size (r, z);
+    fun rsize: RectangleShape -> SFML_System::Vector2f = '$1.getSize()';
+
+    fun point_count: RectangleShape -> size = '$1.getPointCount()';
+
+    fun point: RectangleShape * size -> SFML_System::Vector2f = '$1.getPoint($2)';
+    fun point(r: RectangleShape)(z: size) => point (r, z);
+
+    type ConvexShape = 'sf::ConvexShape' requires graphics_hpp;
+    ctor ConvexShape: size = 'sf::ConvexShape($1)';
+    instance Shape[ConvexShape] {}
+    inherit Shape[ConvexShape];
+
+    proc set_point_count: ConvexShape * size = '$1.setPointCount($2);';
+    proc set_point_count(c: ConvexShape)(r: size) => set_point_count (c, r);
+    fun point_count: ConvexShape -> size = '$1.getPointCount()';
+
+    proc set_point: ConvexShape * size * SFML_System::Vector2f =
+        '$1.setPoint($2);';
+    proc set_point(c: ConvexShape)(p: size, v: SFML_System::Vector2f) =>
+        set_point (c, p, v);
+    fun point: ConvexShape * size -> SFML_System::Vector2f = '$1.getPoint($2)';
+    fun point(c: ConvexShape)(z: size) => point (c, z);
+}

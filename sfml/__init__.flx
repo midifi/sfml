@@ -1,0 +1,9 @@
+include 'sfml/system';
+include 'sfml/window';
+include 'sfml/graphics';
+
+class SFML {
+    inherit SFML_System;
+    inherit SFML_Window;
+    inherit SFML_Graphics;
+}

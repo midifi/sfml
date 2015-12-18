@@ -1,0 +1,73 @@
+class SFML_System {
+    private header system_hpp = '#include <SFML/System.hpp>'
+        requires package 'sfml-system';
+
+
+    type Vector2[T] = 'sf::Vector2<?1>' requires system_hpp;
+    ctor[T] Vector2[T]: T * T = 'sf::Vector2<?1>($1, $2)';
+    fun x[T]: Vector2[T] -> T = '$1.x';
+    fun y[T]: Vector2[T] -> T = '$1.y';
+
+    typedef Vector2i = Vector2[int];
+    typedef Vector2u = Vector2[uint];
+    typedef Vector2f = Vector2[float];
+    fun _ctor_Vector2i(a: int, b: int) => Vector2[int] (a, b);
+    fun _ctor_Vector2u(a: uint, b: uint) => Vector2[uint] (a, b);
+    fun _ctor_Vector2f(a: float, b: float) => Vector2[float] (a, b);
+
+
+    type Vector3[T] = 'sf::Vector3<?1>' requires system_hpp;
+    ctor[T] Vector3[T]: T * T * T = 'sf::Vector3<?1>($1, $2, $3)';
+    fun x[T]: Vector3[T] -> T = '$1.x';
+    fun y[T]: Vector3[T] -> T = '$1.y';
+    fun z[T]: Vector3[T] -> T = '$1.z';
+
+    typedef Vector3i = Vector3[int];
+    typedef Vector3u = Vector3[uint];
+    typedef Vector3f = Vector3[float];
+    fun _ctor_Vector3i(a: int, b: int, c: int) => Vector3[int] (a, b, c);
+    fun _ctor_Vector3u(a: uint, b: uint, c: uint) => Vector3[uint] (a, b, c);
+    fun _ctor_Vector3f(a: float, b: float, c: float) => Vector3[float] (a, b, c);
+
+
+    private class Vectors[T] {
+        // XXX: This should also be part of Dring, but SFML doesn't provide %.
+        /* inherit Addgrp[T]; */
+        /* inherit MultSemi1[T]; */
+
+        fun ==: T * T -> T = '$1 == $2';
+        fun +: T * T -> T = '$1 + $2';
+        fun -: T * T -> T = '$1 - $2';
+        fun *: T * T -> T = '$1 * $2';
+        fun /: T * T -> T = '$1 / $2';
+        fun neg: T * T -> T = '-$1';
+
+        proc +=: T * T = '$1 += $2';
+        proc -=: T * T = '$1 -= $2';
+        proc *=: T * T = '$1 *= $2';
+        proc /=: T * T = '$1 /= $2';
+    }
+
+    // XXX
+    /* instance[T with Addgrp[T], MultSemi1[T]] Vectors[Vector2[T]] { */
+    /*     fun zero(): Vector2[T] => Vector2[T] (#zero[T], #zero[T]); */
+    /*     fun one(): Vector2[T] => Vector2[T] (#one[T], #one[T]); */
+    /* } */
+
+    /* instance[T with Addgrp[T], MultSemi1[T]] Vectors[Vector3[T]] { */
+    /*     fun zero(): Vector3[T] => Vector3[T] (#zero[T], #zero[T], #zero[T]); */
+    /*     fun one(): Vector3[T] => Vector3[T] (#one[T], #one[T], #one[T]); */
+    /* } */
+
+    inherit[T] Vectors[Vector2[T]];
+    inherit[T] Vectors[Vector3[T]];
+
+    instance[T with Str[T]] Str[Vector2[T]] {
+        fun str(v: Vector2[T]) => f"Vector2 (%S, %S)" (v.x.str, v.y.str);
+    }
+
+    instance[T with Str[T]] Str[Vector3[T]] {
+        fun str(v: Vector3[T]) => f"Vector3 (%S, %S, %S)" (v.x.str, v.y.str,
+                                                           v.z.str);
+    }
+}

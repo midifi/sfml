@@ -1,0 +1,4 @@
+Name: sfml-window
+Description: Felix bindings for SFML (Simple Fast Multimedia Library) window.
+provides_dlib: -lsfml-window -lsfml-system  
+provides_slib: -lsfml-window -lsfml-system  

@@ -1,0 +1,116 @@
+#!/usr/bin/env flxrun
+//flxrun:--pkgconfig-path+=sfml-fpc
+include 'sfml/__init__';
+
+open SFML;
+
+proc push_back[T](v: varray[T])(x: T) => push_back (v, x);
+
+gray_code := 50ut;
+gray_color := Color (gray_code, gray_code, gray_code);
+white_keys_per_octave := 7;
+octaves_to_show := 7;
+outline_width := -1.0f;
+
+w := RenderWindow (VideoMode (800u, 600u), 'My window');
+/* w := RenderWindow (#desktop_mode, 'My window'); */
+dm := #desktop_mode;
+dm.println;
+w.set_title 'Abc';
+
+width := w.wsize.x;
+height := w.wsize.y;
+
+white_keys_to_show := white_keys_per_octave * octaves_to_show + 1;
+key_wfrac := 1.0f / white_keys_to_show.float;
+key_width := width.float * key_wfrac;
+key_hfrac := 1.0f/5.0f;
+key_height := height.float * key_hfrac;
+bk_width := key_width * 0.6f;
+bk_height := key_height * 0.7f;
+octave_width := key_width * white_keys_per_octave.float;
+
+/* key_view := View$ FloatRect (0.0f, height.float - key_height, width.float, key_width); */
+/* key_view.set_viewport$ FloatRect (0, 1.0f - key_hfrac, 1.0f, key_hfrac); */
+note_view := View$ FloatRect (0.0f, 0.0f, width.float, height.float);
+/* note_view.set_viewport$ FloatRect (0.0f, 0.0f, 1.0f, 1.0f - key_hfrac); */
+
+proc draw_all() = {
+    var event: Event;
+    while w.poll_event &event perform
+        if event.type == EventType::Closed do
+            w.close;
+            return;
+        done
+
+    txt := #Text;
+    arial := #Font;
+    assert arial.load_from_file '/usr/share/fonts/truetype/msttcorefonts/Arial.ttf';
+    txt.set_string 'Hello, world!';
+    txt.set_font arial;
+    txt.set_character_size 24u;
+    txt.set_color Colors::Blue;
+    txt.set_style TextStyle::Bold;
+    txt.move (100.0f, 100.0f);
+
+    /* white_keys := #list[RectangleShape]; */
+    /* black_keys := #list[RectangleShape]; */
+    white_keys := varray[RectangleShape]$ size$ white_keys_to_show;
+    black_keys := varray[RectangleShape]$ size$ white_keys_to_show;
+    /* letters := #list[Text]; */
+
+    root:for var octave in 0 upto octaves_to_show perform
+        for var key in 0 upto white_keys_per_octave - 1 do
+            if octave == octaves_to_show and key != 0 break root;
+            r := RectangleShape$ Vector2f (key_width, key_height);
+            r.set_fill_color Colors::White;
+            r.set_outline_color Colors::Black;
+            r.set_outline_thickness outline_width;
+            xpos := key_width * key.float + octave_width * octave.float;
+            ypos := height.float - key_height;
+            r.move (xpos, ypos);
+            white_keys.push_back r;
+            /* white_keys = r + white_keys; */
+            /* t := #Text; */
+            /* s := 'CDEFGAB'; */
+            /* t.set_string$ s.[key].str + octave.str; */
+            /* t.move (xpos + 10.0f, ypos + 10.0f); */
+            /* t.set_character_size 15u; */
+            /* t.set_font arial; */
+            /* t.set_color Colors::Black; */
+            /* letters = t + letters; */
+
+            with_black := darray[bool] (
+                true, // C
+                true, // D
+                false, // E
+                true, // F
+                true, // G
+                true, // A
+                false // B
+            );
+
+            if with_black.key and octave != octaves_to_show do
+                br := RectangleShape$ Vector2f (bk_width, bk_height);
+                br.set_fill_color Colors::Black;
+                bxpos := xpos + key_width - bk_width / 2.0f;
+                bypos := ypos;
+                br.move (bxpos, bypos);
+                /* push_back (black_keys, br); */
+                black_keys.push_back br;
+                /* black_keys = br + black_keys; */
+            done
+        done
+
+    w.clear gray_color;
+    w.set_view note_view;
+    w.draw txt;
+    note_view.set_center$ note_view.center - Vector2f (0.0f, 1.0f);
+    w.set_view w.default_view;
+    for shape in white_keys perform w.draw shape;
+    for shape in black_keys perform w.draw shape;
+    /* for l in letters perform w.draw l; */
+    w.display;
+}
+
+while w.isopen call draw_all;
