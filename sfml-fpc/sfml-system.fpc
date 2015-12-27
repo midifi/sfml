@@ -1,4 +1,4 @@
 Name: sfml-system
 Description: Felix bindings for SFML (Simple Fast Multimedia Library) system.
-provides_dlib: -lsfml-system  
-provides_slib: -lsfml-system  
+provides_dlib: -lsfml-system
+provides_slib: -lsfml-system

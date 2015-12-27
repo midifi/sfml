@@ -1,4 +1,4 @@
 Name: sfml-graphics
 Description: Felix bindings for SFML (Simple Fast Multimedia Library) graphics.
-provides_dlib: -lsfml-graphics -lsfml-window -lsfml-system  
-provides_slib: -lsfml-graphics -lsfml-window -lsfml-system  
+provides_dlib: -lsfml-graphics -lsfml-window -lsfml-system
+provides_slib: -lsfml-graphics -lsfml-window -lsfml-system
