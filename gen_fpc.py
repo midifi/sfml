@@ -13,8 +13,10 @@ provides_slib: {libs}
 
 basedir = os.path.dirname(__file__)
 
-def write(pkg, libs):
-    with open(os.path.join(basedir, 'sfml-fpc', 'sfml-%s.fpc' % pkg), 'w') as f:
+def write(pkg, libs, directory=None):
+    if directory == None:
+        directory = os.path.join(basedir, 'sfml-fpc')
+    with open(os.path.join(directory, 'sfml-%s.fpc' % pkg), 'w') as f:
         f.write(template.format(pkg=pkg, libs=libs) + '\n')
 
 if __name__ == '__main__':
