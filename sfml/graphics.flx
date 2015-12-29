@@ -200,7 +200,7 @@ class SFML_Graphics {
 
     proc set_string: Text * string = '$1.setString(static_cast<sf::String>($2));';
     proc set_string(t: Text)(s: string) => set_string (t, s);
-    fun tstring: Text -> string = '$1.getString().toUtf8()';
+    fun tstring: Text -> string = 'static_cast<std::string>($1.getString())';
 
     proc set_character_size: Text * uint = '$1.setCharacterSize($2);';
     proc set_character_size(t: Text)(z: uint) => set_character_size (t, z);

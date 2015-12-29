@@ -83,7 +83,7 @@ class SFML_Window {
         proc set_size: T * SFML_System::Vector2u = '$1->setSize($2);';
         proc set_size(w: T)(v: SFML_System::Vector2u) => set_size (w, v);
 
-        fun title: T -> string = '$1->getTitle()->toUtf8()';
+        fun title: T -> string = 'static_cast<std::string>($1->getTitle())';
         proc set_title: T * string =
             '$1->setTitle(static_cast<sf::String>($2));';
         proc set_title(w: T)(s: string) => set_title (w, s);
