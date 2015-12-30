@@ -24,6 +24,8 @@ class SFML_Window {
 
     type Key = 'sf::Keyboard::Key';
     ctor int: Key = 'static_cast<int>($1)';
+    fun ==: Key * Key -> bool = '$1 == $2';
+    fun !=: Key * Key -> bool = '$1 != $2';
     class KeyCodes {
         const Unknown: Key = 'sf::Keyboard::Key::Unknown';
         const A: Key = 'sf::Keyboard::Key::A';
