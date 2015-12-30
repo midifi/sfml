@@ -49,7 +49,7 @@ class SFML_Window {
         const SensorChanged: uint = 'sf::Event::SensorChanged';
         const Count: uint = 'sf::Event::Count';
     }
-    fun type: Event -> uint = '$1.type';
+    fun etype: Event -> uint = '$1.type';
 
 
     class Style {
