@@ -149,8 +149,8 @@ class SFML_Graphics {
     }
 
     class Bounded[T] {
-        fun get_global_bounds: T -> FloatRect = '$1.getGlobalBounds()';
-        fun get_local_bounds: T -> FloatRect = '$1.getLocalBounds()';
+        fun global_bounds: T -> FloatRect = '$1.getGlobalBounds()';
+        fun local_bounds: T -> FloatRect = '$1.getLocalBounds()';
     }
 
     class RenderTarget[T] {
