@@ -22,6 +22,120 @@ class SFML_Window {
     gen desktop_mode: 1 -> VideoMode = 'sf::VideoMode::getDesktopMode()';
 
 
+    type Key = 'sf::Keyboard::Key';
+    ctor int: Key = 'static_cast<int>($1)';
+    class KeyCodes {
+        const Unknown: Key = 'sf::Keyboard::Key::Unknown';
+        const A: Key = 'sf::Keyboard::Key::A';
+        const B: Key = 'sf::Keyboard::Key::B';
+        const C: Key = 'sf::Keyboard::Key::C';
+        const D: Key = 'sf::Keyboard::Key::D';
+        const E: Key = 'sf::Keyboard::Key::E';
+        const F: Key = 'sf::Keyboard::Key::F';
+        const G: Key = 'sf::Keyboard::Key::G';
+        const H: Key = 'sf::Keyboard::Key::H';
+        const I: Key = 'sf::Keyboard::Key::I';
+        const J: Key = 'sf::Keyboard::Key::J';
+        const K: Key = 'sf::Keyboard::Key::K';
+        const L: Key = 'sf::Keyboard::Key::L';
+        const M: Key = 'sf::Keyboard::Key::M';
+        const N: Key = 'sf::Keyboard::Key::N';
+        const O: Key = 'sf::Keyboard::Key::O';
+        const P: Key = 'sf::Keyboard::Key::P';
+        const Q: Key = 'sf::Keyboard::Key::Q';
+        const R: Key = 'sf::Keyboard::Key::R';
+        const S: Key = 'sf::Keyboard::Key::S';
+        const T: Key = 'sf::Keyboard::Key::T';
+        const U: Key = 'sf::Keyboard::Key::U';
+        const V: Key = 'sf::Keyboard::Key::V';
+        const W: Key = 'sf::Keyboard::Key::W';
+        const X: Key = 'sf::Keyboard::Key::X';
+        const Y: Key = 'sf::Keyboard::Key::Y';
+        const Z: Key = 'sf::Keyboard::Key::Z';
+        const Num0: Key = 'sf::Keyboard::Key::Num0';
+        const Num1: Key = 'sf::Keyboard::Key::Num1';
+        const Num2: Key = 'sf::Keyboard::Key::Num2';
+        const Num3: Key = 'sf::Keyboard::Key::Num3';
+        const Num4: Key = 'sf::Keyboard::Key::Num4';
+        const Num5: Key = 'sf::Keyboard::Key::Num5';
+        const Num6: Key = 'sf::Keyboard::Key::Num6';
+        const Num7: Key = 'sf::Keyboard::Key::Num7';
+        const Num8: Key = 'sf::Keyboard::Key::Num8';
+        const Num9: Key = 'sf::Keyboard::Key::Num9';
+        const Escape: Key = 'sf::Keyboard::Key::Escape';
+        const LControl: Key = 'sf::Keyboard::Key::LControl';
+        const LShift: Key = 'sf::Keyboard::Key::LShift';
+        const LAlt: Key = 'sf::Keyboard::Key::LAlt';
+        const LSystem: Key = 'sf::Keyboard::Key::LSystem';
+        const RControl: Key = 'sf::Keyboard::Key::RControl';
+        const RShift: Key = 'sf::Keyboard::Key::RShift';
+        const RAlt: Key = 'sf::Keyboard::Key::RAlt';
+        const RSystem: Key = 'sf::Keyboard::Key::RSystem';
+        const Menu: Key = 'sf::Keyboard::Key::Menu';
+        const LBracket: Key = 'sf::Keyboard::Key::LBracket';
+        const RBracket: Key = 'sf::Keyboard::Key::RBracket';
+        const SemiColon: Key = 'sf::Keyboard::Key::SemiColon';
+        const Comma: Key = 'sf::Keyboard::Key::Comma';
+        const Period: Key = 'sf::Keyboard::Key::Period';
+        const Quote: Key = 'sf::Keyboard::Key::Quote';
+        const Slash: Key = 'sf::Keyboard::Key::Slash';
+        const BackSlash: Key = 'sf::Keyboard::Key::BackSlash';
+        const Tilde: Key = 'sf::Keyboard::Key::Tilde';
+        const Equal: Key = 'sf::Keyboard::Key::Equal';
+        const Dash: Key = 'sf::Keyboard::Key::Dash';
+        const Space: Key = 'sf::Keyboard::Key::Space';
+        const Return: Key = 'sf::Keyboard::Key::Return';
+        const BackSpace: Key = 'sf::Keyboard::Key::BackSpace';
+        const Tab: Key = 'sf::Keyboard::Key::Tab';
+        const PageUp: Key = 'sf::Keyboard::Key::PageUp';
+        const PageDown: Key = 'sf::Keyboard::Key::PageDown';
+        const End: Key = 'sf::Keyboard::Key::End';
+        const Home: Key = 'sf::Keyboard::Key::Home';
+        const Insert: Key = 'sf::Keyboard::Key::Insert';
+        const Delete: Key = 'sf::Keyboard::Key::Delete';
+        const Add: Key = 'sf::Keyboard::Key::Add';
+        const Subtract: Key = 'sf::Keyboard::Key::Subtract';
+        const Multiply: Key = 'sf::Keyboard::Key::Multiply';
+        const Divide: Key = 'sf::Keyboard::Key::Divide';
+        const Left: Key = 'sf::Keyboard::Key::Left';
+        const Right: Key = 'sf::Keyboard::Key::Right';
+        const Up: Key = 'sf::Keyboard::Key::Up';
+        const Down: Key = 'sf::Keyboard::Key::Down';
+        const Numpad0: Key = 'sf::Keyboard::Key::Numpad0';
+        const Numpad1: Key = 'sf::Keyboard::Key::Numpad1';
+        const Numpad2: Key = 'sf::Keyboard::Key::Numpad2';
+        const Numpad3: Key = 'sf::Keyboard::Key::Numpad3';
+        const Numpad4: Key = 'sf::Keyboard::Key::Numpad4';
+        const Numpad5: Key = 'sf::Keyboard::Key::Numpad5';
+        const Numpad6: Key = 'sf::Keyboard::Key::Numpad6';
+        const Numpad7: Key = 'sf::Keyboard::Key::Numpad7';
+        const Numpad8: Key = 'sf::Keyboard::Key::Numpad8';
+        const Numpad9: Key = 'sf::Keyboard::Key::Numpad9';
+        const F1: Key = 'sf::Keyboard::Key::F1';
+        const F2: Key = 'sf::Keyboard::Key::F2';
+        const F3: Key = 'sf::Keyboard::Key::F3';
+        const F4: Key = 'sf::Keyboard::Key::F4';
+        const F5: Key = 'sf::Keyboard::Key::F5';
+        const F6: Key = 'sf::Keyboard::Key::F6';
+        const F7: Key = 'sf::Keyboard::Key::F7';
+        const F8: Key = 'sf::Keyboard::Key::F8';
+        const F9: Key = 'sf::Keyboard::Key::F9';
+        const F10: Key = 'sf::Keyboard::Key::F10';
+        const F11: Key = 'sf::Keyboard::Key::F11';
+        const F12: Key = 'sf::Keyboard::Key::F12';
+        const F13: Key = 'sf::Keyboard::Key::F13';
+        const F14: Key = 'sf::Keyboard::Key::F14';
+        const F15: Key = 'sf::Keyboard::Key::F15';
+        const Pause: Key = 'sf::Keyboard::Key::Pause';
+    }
+
+    type KeyEvent = 'sf::Event::KeyEvent';
+    fun code: KeyEvent -> Key = '$1.code';
+    fun alt: KeyEvent -> bool = '$1.alt';
+    fun control: KeyEvent -> bool = '$1.control';
+    fun shift: KeyEvent -> bool = '$1.shift';
+    fun system: KeyEvent -> bool = '$1.system';
+
     type Event = 'sf::Event';
     class EventType {
         const Closed: uint = 'sf::Event::Closed';
@@ -50,6 +164,7 @@ class SFML_Window {
         const Count: uint = 'sf::Event::Count';
     }
     fun etype: Event -> uint = '$1.type';
+    fun key: Event -> KeyEvent = '$1.key';
 
 
     class Style {
