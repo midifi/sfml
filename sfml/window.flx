@@ -22,10 +22,15 @@ class SFML_Window {
     gen desktop_mode: 1 -> VideoMode = 'sf::VideoMode::getDesktopMode()';
 
 
+    class NormalEq[T] {
+        fun ==: T * T -> bool = '$1 == $2';
+        fun !=: T * T -> bool = '$1 != $2';
+    }
+
     type Key = 'sf::Keyboard::Key';
     ctor int: Key = 'static_cast<int>($1)';
-    fun ==: Key * Key -> bool = '$1 == $2';
-    fun !=: Key * Key -> bool = '$1 != $2';
+    instance NormalEq[Key] {}
+    inherit NormalEq[Key];
     class KeyCodes {
         const Unknown: Key = 'sf::Keyboard::Key::Unknown';
         const A: Key = 'sf::Keyboard::Key::A';
@@ -138,6 +143,22 @@ class SFML_Window {
     fun shift: KeyEvent -> bool = '$1.shift';
     fun system: KeyEvent -> bool = '$1.system';
 
+    type Button = 'sf::Mouse::Button';
+    instance NormalEq[Button] {}
+    inherit NormalEq[Button];
+    class Buttons {
+        const Left: Button = 'sf::Mouse::Left';
+        const Right: Button = 'sf::Mouse::Right';
+        const Middle: Button = 'sf::Mouse::Middle';
+        const XButton1: Button = 'sf::Mouse::XButton1';
+        const XButton2: Button = 'sf::Mouse::XButton2';
+    }
+
+    type MouseButtonEvent = 'sf::Event::MouseButtonEvent';
+    fun button: MouseButtonEvent -> Button = '$1.button';
+    fun x: MouseButtonEvent -> int = '$1.x';
+    fun y: MouseButtonEvent -> int = '$1.y';
+
     type Event = 'sf::Event';
     class EventType {
         const Closed: uint = 'sf::Event::Closed';
@@ -167,6 +188,7 @@ class SFML_Window {
     }
     fun etype: Event -> uint = '$1.type';
     fun key: Event -> KeyEvent = '$1.key';
+    fun mouse_button: Event -> MouseButtonEvent = '$1.mouseButton';
 
 
     class Style {
