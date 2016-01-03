@@ -137,7 +137,7 @@ class SFML_Window {
     }
 
     type KeyEvent = 'sf::Event::KeyEvent';
-    fun code: KeyEvent -> Key = '$1.code';
+    fun kcode: KeyEvent -> Key = '$1.code';
     fun alt: KeyEvent -> bool = '$1.alt';
     fun control: KeyEvent -> bool = '$1.control';
     fun shift: KeyEvent -> bool = '$1.shift';
